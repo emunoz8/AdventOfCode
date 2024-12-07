@@ -6,7 +6,7 @@ import java.util.BitSet;
 public class SumOfMinValueDifference {
     public static void main(String[] args) {
         // String url = "https://adventofcode.com/2024/day/1/input";
-        String filePath = "./numbers.txt";
+        String filePath = "./input.txt";
         int min = 10000, max = 99999, sum = 0;
         int arraySize = max - min + 1;
         BitSet listA = new BitSet(arraySize);

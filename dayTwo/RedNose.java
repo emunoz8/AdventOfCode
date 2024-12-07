@@ -1,14 +1,16 @@
+import java.util.ArrayList;
+
 public class RedNose {
     public static void main(String[] args) {
-        int safeReports = 0;
+        ArrayList<int[]> nums = new ArrayList<>();
 
-        safeReports = readReports();
+        nums = ReadReports.read("./dayTwo/input.txt");
 
-        System.out.println("The ammount of safe reports is: " + safeReports);
+        System.out.println("Have reports");
 
     }
 
-    public static int readReports() {
+    public static int readAndStoreReports() {
 
         return -1;
     }
