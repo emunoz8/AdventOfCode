@@ -13,13 +13,13 @@ public class RedNose {
         return -1;
     }
 
-    public static boolean isWithingRange(int[] trend, int left, int right, int index) {
+    public static boolean isWithingRange(int[] nums, int[] trend, int left, int right) {
 
-        int diff = left - right;
+        int diff = nums[left] - nums[right];
 
-        diff = calculateTrend(trend, diff, index);
+        diff = calculateTrend(trend, diff, right);
 
-        if (index > 1 && !checkTrend(trend, index))
+        if (right > 1 && !checkTrend(trend, right))
             return false;
 
         if (1 < diff || diff > 3)
@@ -28,23 +28,23 @@ public class RedNose {
         return true;
     }
 
-    public static boolean checkTrend(int[] trend, int index) {
+    public static boolean checkTrend(int[] trend, int right) {
 
-        if (trend[index - 1] != trend[index])
+        if (trend[right - 1] != trend[right])
             return false;
 
         return true;
     }
 
-    public static int calculateTrend(int[] trend, int diff, int index) {
+    public static int calculateTrend(int[] trend, int diff, int right) {
 
         if (diff == 0)
-            trend[index] = 0;
+            trend[right] = 0;
         else if (diff < 0) {
             diff = -diff;
-            trend[index] = -1;
+            trend[right] = -1;
         } else {
-            trend[index] = 1;
+            trend[right] = 1;
         }
 
         return diff;
