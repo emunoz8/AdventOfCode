@@ -3,7 +3,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.BitSet;
 
-public class MinalueDifference {
+public class SumOfMinValueDifference {
     public static void main(String[] args) {
         // String url = "https://adventofcode.com/2024/day/1/input";
         String filePath = "./numbers.txt";
