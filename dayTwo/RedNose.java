@@ -1,7 +1,4 @@
 import java.util.ArrayList;
-import java.util.LinkedList;
-
-import org.w3c.dom.Node;
 
 public class RedNose {
     public static void main(String[] args) {
@@ -19,49 +16,50 @@ public class RedNose {
     public static int iterateThroughReports(ArrayList<int[]> nums) {
         int count = 0;
         for (int[] num : nums) {
-            if (isGoodReport(num)) {// part 1
+            if (isGoodReport(num, false)) {// part 1
                 count++;
-                System.out.print("Pass : ");
-
-            } else if (dampenerReport(num)) {// part 2
+            } else if (isGoodReport(num, true)) {
                 count++;
-
             }
 
         }
-
         return count;
     }
 
-    public static boolean isGoodReport(int[] nums) {
+    public static boolean isGoodReport(int[] nums, boolean hasDampener) {
         int[] trend = new int[nums.length - 1];
+        return iterateThroughLine(nums, trend, hasDampener);
+    }
+
+    public static boolean iterateThroughLine(int[] nums, int[] trend, boolean hasDampener) {
 
         for (int i = 1; i < nums.length; i++) {
-            if (!isWithingRange(nums, trend, i - 1, i))
+            if (!isWithinRange(nums, trend, i - 1, i) && !hasDampener) {
                 return false;
+            }
         }
+        // if (hasDampener)
+        // return backtracking(nums, trend);
 
         return true;
     }
 
-    public static boolean dampenerReport(int[] nums) {
-
-        return true;
-    }
-
-    public static boolean isWithingRange(int[] nums, int[] trend, int left, int right) {
+    public static boolean isWithinRange(int[] nums, int[] trend, int left, int right) {
 
         int diff = nums[left] - nums[right];
 
         trend[left] = diff;
 
-        if (right > 1 && !isTrending(trend, left - 1, left))
+        if (right > 1 && !isTrending(trend, left))
             return false;
 
         return inRange(diff);
     }
 
-    public static boolean isTrending(int[] trend, int left, int right) {
+    public static boolean isTrending(int[] trend, int right) {
+        int left = right - 1;
+        if (trend[left] == 0 && trend[right] == 0)
+            return false;
 
         if ((trend[left] > 0 && trend[right] > 0) || (trend[left] < 0 && trend[right] < 0))
             return true;
@@ -136,4 +134,73 @@ public class RedNose {
 
 // return diff;
 
+// }
+
+// public static int[] removeError(int[] nums, int errorIndex) {
+// int[] returnArr = new int[nums.length - 1];
+
+// for (int i = 0, j = 0; i < nums.length; i++, j++) {
+// if (i == errorIndex)
+// j--;
+// else {
+// returnArr[j] = nums[i];
+// }
+// }
+
+// return returnArr;
+// }
+
+// public static int findErrorIndex(int[] trend, int index) {
+// int errorIndex = -1;
+// if (index + 1 == trend.length && !isTrending(trend, index))
+// errorIndex = index;
+// else if (index + 1 < trend.length && !isTrending(trend, index) &&
+// !isTrending(trend, index + 1))
+// errorIndex = index;
+
+// return errorIndex;
+// }
+
+// public static boolean removeError(int[] nums, int errorIndex) {
+// int[] newNums = new int[nums.length - 1];
+// int[] newTrend = new int[newNums.length - 1];
+
+// for (int i = 0, j = 0; i < nums.length; i++, j++) {
+// if (i == errorIndex)
+// j--;
+// else {
+// newNums[j] = nums[i];
+// }
+// }
+
+// for (int i = 0; i < newNums.length; i++) {
+// if (!isWithinRange(newNums, newTrend, i - 1, i))
+// return false;
+// }
+// return true;
+// }
+
+// public static boolean hasOneError(int[] nums, int[] trend) {
+// int errorIndex = -1;
+// int carry = 0;
+
+// for (int i = 1; i < trend.length && errorIndex != i - 1; i++) {
+// if (findErrorIndex(trend, i) != -1) {
+// errorIndex = i;
+
+// }
+// }
+
+// if (errorIndex != -1) {
+// return removeError(nums, errorIndex);
+// }
+
+// for (int i = 0; i < trend.length; i++) {
+// if (errorIndex != i && !inRange(trend[i] + carry))
+// return false;
+
+// carry = errorIndex == i ? trend[errorIndex] : 0;
+// }
+
+// return true;
 // }
