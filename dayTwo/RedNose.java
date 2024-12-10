@@ -20,6 +20,8 @@ public class RedNose {
                 count++;
             } else if (isGoodReport(num, true)) {
                 count++;
+            } else {
+                printReport(num);
             }
 
         }
@@ -32,27 +34,50 @@ public class RedNose {
     }
 
     public static boolean iterateThroughLine(int[] nums, int[] trend, boolean hasDampener) {
+        if (hasDampener) {
 
-        for (int i = 1; i < nums.length; i++) {
-            if (!isWithinRange(nums, trend, i - 1, i) && !hasDampener) {
-                return false;
+            for (int i = 1; i < nums.length; i++) {
+                if (!isWithinRange(nums, trend, i - 1, i) && !checkNeighbor(nums, i - 1, i)) {
+                    return false;
+                }
+            }
+
+        } else {
+            for (int i = 1; i < nums.length; i++) {
+                if (!isWithinRange(nums, trend, i - 1, i))
+                    return false;
             }
         }
-        // if (hasDampener)
-        // return backtracking(nums, trend);
 
         return true;
     }
 
+    public static boolean checkNeighbor(int[] nums, int left, int right) {
+        return removeNumberAtIndex(nums, left) || removeNumberAtIndex(nums, right);
+    }
+
+    public static boolean removeNumberAtIndex(int[] nums, int ignore) {
+        int[] rArr = new int[nums.length - 1];
+        int[] trend = new int[rArr.length - 1];
+
+        for (int i = 0, j = 0; i < nums.length; i++, j++) {
+            if (ignore != i)
+                rArr[j] = nums[i];
+            else
+                j--;
+        }
+
+        for (int i = 1; i < rArr.length; i++)
+            if (!isWithinRange(rArr, trend, i - 1, i))
+                return false;
+        return true;
+    }
+
     public static boolean isWithinRange(int[] nums, int[] trend, int left, int right) {
-
         int diff = nums[left] - nums[right];
-
         trend[left] = diff;
-
         if (right > 1 && !isTrending(trend, left))
             return false;
-
         return inRange(diff);
     }
 
@@ -60,10 +85,8 @@ public class RedNose {
         int left = right - 1;
         if (trend[left] == 0 && trend[right] == 0)
             return false;
-
         if ((trend[left] > 0 && trend[right] > 0) || (trend[left] < 0 && trend[right] < 0))
             return true;
-
         return false;
     }
 
@@ -75,9 +98,7 @@ public class RedNose {
         for (int i = 0; i < nums.length; i++)
             System.out.print(nums[i] + " ");
         System.out.println();
-
     }
-
 }
 
 // public static boolean isTrendConsistent(int[] trend) {
@@ -203,4 +224,20 @@ public class RedNose {
 // }
 
 // return true;
+// }
+
+// public static boolean trendOfTrends(int[] nums, int[] trend, int index,
+// boolean isRightNeighbor) {
+// if (index - 1 < 0 || index + 1 > trend.length)
+// return false;
+// if (index + 2 == nums.length)
+// return true;
+
+// if (isRightNeighbor)
+// trend[index] = nums[index] - nums[index + 2];
+// else
+// trend[index] = nums[index - 1] - nums[index + 1];
+
+// return isTrending(trend, index);
+
 // }
