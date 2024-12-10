@@ -15,17 +15,35 @@ public class RedNose {
 
     public static int iterateThroughReports(ArrayList<int[]> nums) {
         int count = 0;
+        int amount = 0;
         for (int[] num : nums) {
             if (isGoodReport(num, false)) {// part 1
                 count++;
             } else if (isGoodReport(num, true)) {
                 count++;
             } else {
-                printReport(num);
+                if (onlyWithinRange(num)) {
+                    amount++;
+                    printReport(num);
+                }
+                // printReport(num);
             }
 
         }
+
+        System.out.println("In Range but fail: " + amount);
         return count;
+    }
+
+    public static boolean onlyWithinRange(int[] num) {
+        int val = 0;
+        for (int i = 1; i < num.length; i++) {
+            val = num[i - 1] - num[i];
+            if (!inRange(val))
+                return false;
+        }
+        printReport(num);
+        return true;
     }
 
     public static boolean isGoodReport(int[] nums, boolean hasDampener) {
@@ -53,10 +71,14 @@ public class RedNose {
     }
 
     public static boolean checkNeighbor(int[] nums, int left, int right) {
-        return removeNumberAtIndex(nums, left) || removeNumberAtIndex(nums, right);
+        return removeNumberAtIndex(nums, left) || removeNumberAtIndex(nums, right) ||
+                removeNumberAtIndex(nums, left - 1) || removeNumberAtIndex(nums, right + 1);
     }
 
     public static boolean removeNumberAtIndex(int[] nums, int ignore) {
+        if (ignore < 0 || ignore > nums.length - 1)
+            return false;
+
         int[] rArr = new int[nums.length - 1];
         int[] trend = new int[rArr.length - 1];
 
