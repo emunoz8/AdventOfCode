@@ -1,6 +1,3 @@
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.BitSet;
 import java.util.ArrayList;
 
@@ -32,7 +29,7 @@ public class SumOfMinValueDifference {
         }
         sum = sumOfDifferences(listA, listB, occurancesA, occurancesB);
         System.out.println("from sum of difference method: " + sum);
-        return sum + similarityScore(listA, listB, occurancesA, occurancesB, min);
+        return similarityScore(listA, listB, occurancesA, occurancesB, min);
 
     }
 
@@ -77,25 +74,3 @@ public class SumOfMinValueDifference {
         return rArr;
     }
 }
-
-// public static void readAndStore(String filePath, BitSet listA, BitSet listB,
-// int[] occA, int[] occB, int min) {
-// try {
-// Files.lines(Paths.get(filePath)).forEach(line -> {
-// String[] parts = line.split("\\s+", 2);
-// if (parts.length == 2) {
-// int i = Integer.parseInt(parts[0]) - min;
-// int j = Integer.parseInt(parts[1]) - min;
-// listA.set(i);
-// listB.set(j);
-// occA[i]++;
-// occB[j]++;
-
-// }
-// });
-
-// } catch (IOException e) {
-// e.printStackTrace();
-// }
-
-// }
