@@ -1,7 +1,7 @@
 import java.util.BitSet;
 import java.util.ArrayList;
 
-public class SumOfMinValueDifference {
+public class HistorianHysteria {
     public static void main(String[] args) {
         int min = 10000, max = 99999, sum = 0;
         int arraySize = max - min + 1;

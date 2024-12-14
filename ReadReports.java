@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.Path;
 
 public class ReadReports {
 
@@ -25,6 +26,19 @@ public class ReadReports {
             nums[i] = Integer.parseInt(parts[i]);
 
         return nums;
+    }
+
+    public static String getString(String filePath) {
+        Path path = Path.of(filePath);
+        String rString = "Didnt work";
+
+        try {
+            rString = Files.readString(path);
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+        }
+
+        return rString;
     }
 
 }
