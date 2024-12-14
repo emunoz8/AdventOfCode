@@ -1,5 +1,4 @@
 import java.util.regex.*;
-import java.util.ArrayList;
 
 public class MullItOver {
     public static void main(String[] args) {
