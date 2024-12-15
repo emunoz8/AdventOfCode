@@ -12,7 +12,7 @@ public class PrintQueue {
             nums.add(new Node(String.valueOf(i)));
         }
 
-        ArrayList<String> rules = ReadReports.getRules("./05day/input.txt", reports);
+        ArrayList<String> rules = ReadReports.getRulesAndReports("./05day/input.txt", reports);
         setRules(rules, nums);
 
         total = iterateThroughReports(nodes, reports, nums);

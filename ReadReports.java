@@ -71,7 +71,7 @@ public class ReadReports {
 
     }
 
-    public static ArrayList<String> getRules(String filePath, ArrayList<String> reports) {
+    public static ArrayList<String> getRulesAndReports(String filePath, ArrayList<String> reports) {
         ArrayList<String> list = new ArrayList<>();
         boolean isReports = false;
 
