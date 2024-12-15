@@ -2,6 +2,8 @@ import java.util.ArrayList;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.Path;
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 public class ReadReports {
 
@@ -39,6 +41,34 @@ public class ReadReports {
         }
 
         return rString;
+    }
+
+    public static char[][] set2DArray(String filePath) {
+        char[][] rArr = { {} };
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            ArrayList<char[]> list = new ArrayList<>();
+
+            while ((line = reader.readLine()) != null) {
+                char[] charArray = line.toCharArray();
+                list.add(charArray);
+
+            }
+            int rows = list.size();
+            int cols = list.get(0).length;
+            rArr = new char[rows][cols];
+
+            for (int i = 0; i < rows; i++)
+                rArr[i] = list.get(i);
+
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+
+        }
+
+        return rArr;
+
     }
 
 }
