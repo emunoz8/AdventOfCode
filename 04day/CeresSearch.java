@@ -78,32 +78,28 @@ public class CeresSearch {
     }
 
     public static void iterateThroughX(char[][] puzzle, ArrayList<int[]> xPositions) {
+        ExecutorService executor = Executors.newCachedThreadPool();
+
+        for (int[] position : xPositions) {
+            executor.submit(() -> traverseInAllDirections(puzzle, position[0], position[1]));
+        }
+        executor.shutdown();
 
         try {
-            for (int[] position : xPositions) {
-                int startX = position[0];
-                int startY = position[1];
-                traverseInAllDirections(puzzle, startX, startY);
-            }
+            executor.awaitTermination(Long.MAX_VALUE, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
-            System.out.println("Error: " + e);
+            System.out.println("Error during thread execution: " + e);
         }
-
     }
 
-    public static void traverseInAllDirections(char[][] puzzle, int startX, int startY) throws InterruptedException {
-        ExecutorService executor = Executors.newFixedThreadPool(8);
+    public static void traverseInAllDirections(char[][] puzzle, int startX, int startY) {
 
         for (int[] direction : DIRECTIONS) {
             int dx = direction[0];
             int dy = direction[1];
 
-            Runnable task = () -> findMas(puzzle, startX, startY, dx, dy);
-            executor.submit(task);
+            findMas(puzzle, startX, startY, dx, dy);
         }
-        executor.shutdown();
-        executor.awaitTermination(Long.MAX_VALUE, TimeUnit.SECONDS);
-
     }
 
     public static void findMas(char[][] puzzle, int startX, int startY, int dx, int dy) {
@@ -111,7 +107,7 @@ public class CeresSearch {
         int y = startY + dy;
         int index = 0;
         String findWord = "MAS";
-        while (x >= 0 && x < puzzle.length && y >= 0 && y < puzzle[0].length) {
+        while (isInbounds(puzzle, startX, startY, dx, dy)) {
             char current = puzzle[x][y];
             if (current != findWord.charAt(index))
                 return;
