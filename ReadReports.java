@@ -71,4 +71,27 @@ public class ReadReports {
 
     }
 
+    public static ArrayList<String> getRules(String filePath, ArrayList<String> reports) {
+        ArrayList<String> list = new ArrayList<>();
+        boolean isReports = false;
+
+        try {
+            for (String line : Files.readAllLines(Paths.get(filePath))) {
+                if (line.equals("")) {
+                    isReports = true;
+                    continue;
+                }
+                if (!isReports)
+                    list.add(line);
+                if (isReports)
+                    reports.add(line);
+
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+        }
+        return list;
+    }
+
 }
