@@ -5,19 +5,18 @@ public class PrintQueue {
     public static void main(String[] args) {
         ArrayList<Node> nums = new ArrayList<>();
         ArrayList<String> reports = new ArrayList<>();
-        ArrayList<Node[]> nodes = new ArrayList<>();
-        int total = 0;
+        ArrayList<ArrayList<Node>> nodes = new ArrayList<>();
+        int[] totals = { 0, 0 };
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 100; i++)
             nums.add(new Node(String.valueOf(i)));
-        }
 
         ArrayList<String> rules = ReadReports.getRulesAndReports("./05day/input.txt", reports);
         setRules(rules, nums);
+        iterateThroughReports(nodes, reports, nums, totals);
 
-        total = iterateThroughReports(nodes, reports, nums);
-
-        System.out.println(total);
+        System.out.println("Totals of good reports: " + totals[0]);
+        System.out.println("Totals of fixed reports: " + totals[1]);
 
     }
 
@@ -30,48 +29,51 @@ public class PrintQueue {
         }
     }
 
-    public static int iterateThroughReports(ArrayList<Node[]> listOfNodes, ArrayList<String> reports,
-            ArrayList<Node> nums) {
+    public static void iterateThroughReports(ArrayList<ArrayList<Node>> listOfNodes, ArrayList<String> reports,
+            ArrayList<Node> nums, int[] totals) {
         int total = 0;
-        for (String report : reports) {
+        for (String report : reports)
             listOfNodes.add(getNodesFromReport(nums, report));
-        }
 
-        for (Node[] list : listOfNodes) {
-            total += valueOfValidReport(list);
+        for (ArrayList<Node> list : listOfNodes) {
+            total = valueOfValidReport(list);
+            totals[0] += total;
+            if (total == 0)
+                totals[1] += rearrangeList(list);
         }
-
-        return total;
     }
 
-    public static int valueOfValidReport(Node[] list) {
+    public static int valueOfValidReport(ArrayList<Node> list) {
 
-        for (int i = 0; i < list.length; i++) {
-            for (int j = i + 1; j < list.length; j++) {
-                if (!list[i].isLess(list[j]))
-                    return 0;
-            }
-        }
-        int mid = list.length / 2;
-
-        return Integer.parseInt(list[mid].getValue());
+        return isValid(list) ? Integer.parseInt(list.get(list.size() / 2).getValue()) : 0;
     }
 
-    public static Node[] getNodesFromReport(ArrayList<Node> list, String report) {
-        ArrayList<String> nums = new ArrayList<>();
-        Node[] rArr;
+    public static int rearrangeList(ArrayList<Node> list) {
 
-        for (int i = 0; i < report.length(); i += 3) {
-            nums.add(report.substring(i, i + 2));
+        for (int i = 0; i < list.size(); i++) {
+
         }
 
-        rArr = new Node[nums.size()];
+        return -1;
 
-        for (int i = 0; i < nums.size(); i++) {
-            rArr[i] = Node.findNode(list, nums.get(i));
-        }
+    }
 
-        return rArr;
+    public static boolean isValid(ArrayList<Node> list) {
+        for (int i = 0; i < list.size(); i++)
+            for (int j = i + 1; j < list.size(); j++)
+                if (!list.get(i).isLess(list.get(j)))
+                    return false;
+
+        return true;
+    }
+
+    public static ArrayList<Node> getNodesFromReport(ArrayList<Node> list, String report) {
+        ArrayList<Node> nums = new ArrayList<>();
+
+        for (int i = 0; i < report.length(); i += 3)
+            nums.add(Node.findNode(list, report.substring(i, i + 2)));
+
+        return nums;
     }
 
 }
