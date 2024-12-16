@@ -36,32 +36,38 @@ public class PrintQueue {
             listOfNodes.add(getNodesFromReport(nums, report));
 
         for (ArrayList<Node> list : listOfNodes) {
-            total = valueOfValidReport(list);
+            total = isValid(list) ? Integer.parseInt(list.get(list.size() / 2).getValue()) : 0;
             totals[0] += total;
             if (total == 0)
                 totals[1] += rearrangeList(list);
         }
     }
 
-    public static int valueOfValidReport(ArrayList<Node> list) {
-
-        return isValid(list) ? Integer.parseInt(list.get(list.size() / 2).getValue()) : 0;
-    }
-
     public static int rearrangeList(ArrayList<Node> list) {
 
         for (int i = 0; i < list.size(); i++) {
-
+            for (int j = 1 + i; j < list.size(); j++) {
+                if (!isLess(list, i, j)) {
+                    Node temp = list.get(j);
+                    list.remove(j);
+                    list.add(i, temp);
+                }
+            }
         }
 
-        return -1;
+        return Integer.parseInt(list.get(list.size() / 2).getValue());
 
+    }
+
+    public static boolean isLess(ArrayList<Node> list, int left, int right) {
+
+        return list.get(left).isLess(list.get(right));
     }
 
     public static boolean isValid(ArrayList<Node> list) {
         for (int i = 0; i < list.size(); i++)
             for (int j = i + 1; j < list.size(); j++)
-                if (!list.get(i).isLess(list.get(j)))
+                if (!isLess(list, i, j))
                     return false;
 
         return true;
