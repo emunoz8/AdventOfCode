@@ -25,7 +25,7 @@ public class GuardGavillant {
                 obstacles++;
         }
 
-        System.out.print(obstacles);
+        System.out.println(obstacles);
 
     }
 
