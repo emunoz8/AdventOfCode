@@ -11,7 +11,7 @@ public class BridgeRepair {
         int maxNums = 0;
         Long sum = 0L;
         lines = ReadReports.getRulesAndReports("./07day/input.txt", lines);
-        maxNums = storeInMap(lines, problems);
+        maxNums = storeInArrayList(lines, problems);
         storePermutation(permutation, maxNums - 1);
         sum = iterateThroughProblems(problems, permutation);
         System.out.println(sum);
@@ -62,7 +62,7 @@ public class BridgeRepair {
         }
     }
 
-    public static int storeInMap(ArrayList<String> lines, ArrayList<Long[]> problems) {
+    public static int storeInArrayList(ArrayList<String> lines, ArrayList<Long[]> problems) {
         int max = 0;
         for (String line : lines) {
             String[] parts = line.split(":");
