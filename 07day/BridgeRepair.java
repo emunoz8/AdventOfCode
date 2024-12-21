@@ -7,15 +7,56 @@ public class BridgeRepair {
 
     public static void main(String[] args) {
         ArrayList<String> lines = new ArrayList<>();
-        Map<Long, int[]> problems = new LinkedHashMap<>();
+        ArrayList<Long[]> problems = new ArrayList<>();
         Map<Integer, boolean[][]> permutation = new HashMap<>();
         int maxNums = 0;
+        Long sum = 0L;
 
         lines = ReadReports.getRulesAndReports("./07day/input.txt", lines);
 
         maxNums = storeInMap(lines, problems);
 
         storePermutation(permutation, maxNums - 1);
+
+        sum = iterateThroughProblems(problems, permutation);
+        System.out.println(sum);
+
+    }
+
+    public static Long iterateThroughProblems(ArrayList<Long[]> problems, Map<Integer, boolean[][]> permutations) {
+        Long total = 0L;
+
+        for (Long[] problem : problems) {
+            Long solution = problem[0];
+            Long[] nums = new Long[problem.length - 1];
+            for (int i = 1; i < problem.length; i++) {
+                nums[i - 1] = problem[i];
+            }
+            int amountOfPerm = nums.length - 1;
+            boolean[][] perms = permutations.get(amountOfPerm);
+
+            if (findSum(solution, nums, perms))
+                total += solution;
+        }
+        return total;
+    }
+
+    public static boolean findSum(Long solution, Long[] nums, boolean[][] perms) {
+
+        for (int i = 0; i < perms.length; i++) {
+            Long sum = perms[i][0] ? nums[0] + nums[1] : nums[0] * nums[1];
+
+            for (int j = 1; j < perms[i].length; j++) {
+                if (perms[i][j])
+                    sum += nums[j + 1];
+                else
+                    sum *= nums[j + 1];
+            }
+            if (sum.equals(solution))
+                return true;
+        }
+
+        return false;
 
     }
 
@@ -49,20 +90,22 @@ public class BridgeRepair {
 
     }
 
-    public static int storeInMap(ArrayList<String> lines, Map<Long, int[]> problems) {
+    public static int storeInMap(ArrayList<String> lines, ArrayList<Long[]> problems) {
         int max = 0;
         for (String line : lines) {
             String[] parts = line.split(":");
             Long solution = Long.parseLong(parts[0]);
 
             String[] nums = parts[1].trim().split("\\s+");
-            int[] array = new int[nums.length];
+            Long[] array = new Long[nums.length + 1];
 
-            for (int i = 0; i < nums.length; i++) {
-                array[i] = Integer.parseInt(nums[i]);
+            array[0] = solution;
+
+            for (int i = 1; i < array.length; i++) {
+                array[i] = Long.parseLong(nums[i - 1]);
             }
 
-            problems.put(solution, array);
+            problems.add(array);
 
             if (nums.length > max)
                 max = nums.length;
