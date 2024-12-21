@@ -16,16 +16,15 @@ public class BridgeRepair {
 
     }
 
-    public static void storePermutation(Map<Integer, boolean[][]> permutation) {
+    public static void storePermutation(Map<Integer, boolean[][]> permutation, int n) {
 
-        for(int i =2; i < 11; i++){
+        for (int i = 0; i < n; i++) {
+            boolean[][] perms = new boolean[(int) Math.pow(2, n)][n];
+            for (int j = 0; j < perms.length; j++)
+                for (int k = 0; k < n; k++)
+                    perms[j][k] = (j & (1 << (n - k - 1))) != 0;
 
-            boolean[][] perms = new boolean[(int)Math.pow(2,i)][i];
-
-            for(int j =0; j < perms.length; j++)
-                
-
-
+            permutation.put(i, perms);
 
         }
 
