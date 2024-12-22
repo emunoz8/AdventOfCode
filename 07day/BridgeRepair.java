@@ -32,86 +32,93 @@ public class BridgeRepair {
             if (findSum(solution, nums, perms))
                 total += solution;
             else {
-                Long tot = concatResult(permutations, solution, nums);
-                total += tot;
-                if (tot == 0) {
-                    for (int i = 0; i < problem.length; i++) {
-                        System.out.print(problem[i] + " ");
-                    }
-                    System.out.println();
-                }
-
+                total += canConcat(solution, nums);
             }
 
         }
         return total;
     }
 
-    public static Long concatResult(Map<Integer, boolean[][]> permutations, Long solution, Long[] nums) {
-        String stringSolution = String.valueOf(solution);
+    public static int canConcat(Long solution, Long[] nums) {
+        int n = nums.length - 1;
+        int totalPermutations = (int) Math.pow(3, n);
+        int[][] permutations = new int[totalPermutations][n];
+        int[] current = new int[n];
+        int[] rowIndex = { 0 };
+        permutationOfThree(permutations, current, n, 0, rowIndex);
 
-        for (int i = 1; i < stringSolution.length(); i++) {
-            String left = stringSolution.substring(0, i);
-            String right = stringSolution.substring(i, stringSolution.length());
+        // TO-DO iterate through permutations find franken-number that equals to
+        // solution
 
-            if (canConcat(permutations, nums, left, right)) {
-                // System.out.println("The solution is " + solution + ": " + left + " " +
-                // right);
-                return solution;
-            }
-
-        }
-
-        return 0L;
+        return -1;
     }
 
-    public static boolean canConcat(Map<Integer, boolean[][]> permutations, Long[] nums, String left, String right) {
-        Long leftNum = Long.parseLong(left);
-        Long rightNum = Long.parseLong(right);
-
-        // maybe not
-        if (leftNum.equals(nums[0]) && rightNum.equals(nums[1]))
-            return true;
-
-        boolean isFound = false;
-
-        int splitIndex = 1;
-        while (splitIndex < nums.length && !isFound) {
-            boolean[][] perms = permutations.get(splitIndex);
-            if (findSum(leftNum, nums, perms)) {
-                isFound = true;
-            }
-
-            splitIndex++;
+    // 3^n, -1,0,1 mult, concat, add
+    public static void permutationOfThree(int[][] permutations, int[] current, int n, int pos, int[] rowIndex) {
+        if (pos == n) {
+            System.arraycopy(current, 0, permutations[rowIndex[0]], 0, n);
+            rowIndex[0]++; // Move to the next row
+            return;
         }
-
-        if (isFound && nums.length - splitIndex > 0) {
-            Long[] rightNums = new Long[nums.length - splitIndex];
-            for (int j = 0; j < rightNums.length; j++)
-                rightNums[j] = nums[j + splitIndex];
-
-            boolean[][] perms = permutations.get(rightNums.length - 1);
-
-            if (findSum(rightNum, rightNums, perms)) {
-
-                return true;
-            }
-
+        for (int i = -1; i <= 1; i++) {
+            current[pos] = i;
+            permutationOfThree(permutations, current, n, pos + 1, rowIndex);
         }
-        return false;
     }
+
+    // public static Long concatResult(Map<Integer, boolean[][]> permutations, Long
+    // solution, Long[] nums) {
+    // String stringSolution = String.valueOf(solution);
+
+    // for (int i = 1; i < stringSolution.length(); i++) {
+    // String left = stringSolution.substring(0, i);
+    // String right = stringSolution.substring(i, stringSolution.length());
+
+    // if (canConcat(permutations, nums, left, right)) {
+    // return solution;
+    // }
+
+    // }
+
+    // return 0L;
+    // }
+
+    // public static boolean canConcat(Map<Integer, boolean[][]> permutations,
+    // Long[] nums, String left, String right) {
+    // Long leftNum = Long.parseLong(left);
+    // Long rightNum = Long.parseLong(right);
+    // boolean isFound = false;
+
+    // int splitIndex = 1;
+    // while (splitIndex < nums.length && !isFound) {
+    // boolean[][] perms = permutations.get(splitIndex);
+    // if (findSum(leftNum, nums, perms)) {
+    // isFound = true;
+    // }
+
+    // splitIndex++;
+    // }
+
+    // if (isFound && nums.length - splitIndex > 0) {
+    // Long[] rightNums = new Long[nums.length - splitIndex];
+    // for (int j = 0; j < rightNums.length; j++)
+    // rightNums[j] = nums[j + splitIndex];
+
+    // boolean[][] perms = permutations.get(rightNums.length - 1);
+
+    // if (findSum(rightNum, rightNums, perms)) {
+
+    // return true;
+    // }
+
+    // }
+    // return false;
+    // }
 
     public static boolean findSum(Long solution, Long[] nums, boolean[][] perms) {
-        // System.out.print("\tthe solution is: " + solution + "\t\t");
-        // for (int i = 0; i < nums.length; i++)
-        // System.out.print(nums[i] + " ");
-        // System.out.println();
-        if (nums.length == 1) {
-            if (solution.equals(nums[0]))
-                return true;
-            else
-                return false;
-        }
+
+        if (nums.length == 1)
+            return solution.equals(nums[0]) ? true : false;
 
         for (int i = 0; i < perms.length; i++) {
             Long sum = perms[i][0] ? nums[0] + nums[1] : nums[0] * nums[1];
