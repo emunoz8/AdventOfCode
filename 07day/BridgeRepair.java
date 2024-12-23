@@ -39,7 +39,7 @@ public class BridgeRepair {
         return total;
     }
 
-    public static int canConcat(Long solution, Long[] nums) {
+    public static Long canConcat(Long solution, Long[] nums) {
         int n = nums.length - 1;
         int totalPermutations = (int) Math.pow(3, n);
         int[][] permutations = new int[totalPermutations][n];
@@ -47,13 +47,60 @@ public class BridgeRepair {
         int[] rowIndex = { 0 };
         permutationOfThree(permutations, current, n, 0, rowIndex);
 
-        // TO-DO iterate through permutations find franken-number that equals to
-        // solution
+        if (iteratePermutations(permutations, nums, solution))
+            return solution;
 
-        return -1;
+        return 0L;
     }
 
-    // 3^n, -1,0,1 mult, concat, add
+    public static boolean iteratePermutations(int[][] permutations, Long[] nums, Long solution) {
+        int n = permutations[0].length;
+
+        for (int i = 0; i < permutations.length; i++) {
+            ArrayList<String> concat = new ArrayList<>();
+            Long sum = nums[0];
+
+            for (int j = 0; j < n; j++) {
+                if (permutations[i][j] == 0) {
+                    sum += nums[j + 1];
+                    // System.out.print(nums[j] + " + ");
+                } else if (permutations[i][j] == 1) {
+                    sum *= nums[j + 1];
+                    // System.out.print(nums[j] + " * ");
+                } else {
+                    concat.add(String.valueOf(sum));
+                    // System.out.print(nums[j] + " || ");
+                    sum = nums[j + 1];
+                }
+            }
+
+            concat.add(String.valueOf(sum));
+            String candidate = "";
+            for (String num : concat)
+                candidate += num;
+
+            if (candidate.equals(String.valueOf(solution))) {
+                System.out.println(solution + " : " + candidate);
+                return true;
+            }
+
+        }
+
+        return false;
+    }
+
+    public static void print2d(int[][] perms) {
+
+        for (int i = 0; i < perms.length; i++) {
+            for (int j = 0; j < perms[i].length; j++)
+                System.out.print(perms[i][j] + " ");
+
+            System.out.println();
+        }
+
+    }
+
+    // 3^n, -1, 0, 1 concat, mult, add
     public static void permutationOfThree(int[][] permutations, int[] current, int n, int pos, int[] rowIndex) {
         if (pos == n) {
             System.arraycopy(current, 0, permutations[rowIndex[0]], 0, n);
@@ -66,59 +113,7 @@ public class BridgeRepair {
         }
     }
 
-    // public static Long concatResult(Map<Integer, boolean[][]> permutations, Long
-    // solution, Long[] nums) {
-    // String stringSolution = String.valueOf(solution);
-
-    // for (int i = 1; i < stringSolution.length(); i++) {
-    // String left = stringSolution.substring(0, i);
-    // String right = stringSolution.substring(i, stringSolution.length());
-
-    // if (canConcat(permutations, nums, left, right)) {
-    // return solution;
-    // }
-
-    // }
-
-    // return 0L;
-    // }
-
-    // public static boolean canConcat(Map<Integer, boolean[][]> permutations,
-    // Long[] nums, String left, String right) {
-    // Long leftNum = Long.parseLong(left);
-    // Long rightNum = Long.parseLong(right);
-    // boolean isFound = false;
-
-    // int splitIndex = 1;
-    // while (splitIndex < nums.length && !isFound) {
-    // boolean[][] perms = permutations.get(splitIndex);
-    // if (findSum(leftNum, nums, perms)) {
-    // isFound = true;
-    // }
-
-    // splitIndex++;
-    // }
-
-    // if (isFound && nums.length - splitIndex > 0) {
-    // Long[] rightNums = new Long[nums.length - splitIndex];
-    // for (int j = 0; j < rightNums.length; j++)
-    // rightNums[j] = nums[j + splitIndex];
-
-    // boolean[][] perms = permutations.get(rightNums.length - 1);
-
-    // if (findSum(rightNum, rightNums, perms)) {
-
-    // return true;
-    // }
-
-    // }
-    // return false;
-    // }
-
     public static boolean findSum(Long solution, Long[] nums, boolean[][] perms) {
-
-        if (nums.length == 1)
-            return solution.equals(nums[0]) ? true : false;
 
         for (int i = 0; i < perms.length; i++) {
             Long sum = perms[i][0] ? nums[0] + nums[1] : nums[0] * nums[1];
