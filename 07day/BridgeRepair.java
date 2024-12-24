@@ -20,6 +20,7 @@ public class BridgeRepair {
 
     public static Long iterateThroughProblems(ArrayList<Long[]> problems, Map<Integer, boolean[][]> permutations) {
         Long total = 0L;
+        Long rechecks = 0L;
 
         for (Long[] problem : problems) {
             Long solution = problem[0];
@@ -32,11 +33,13 @@ public class BridgeRepair {
             if (findSum(solution, nums, perms))
                 total += solution;
             else {
-                total += canConcat(solution, nums);
+                rechecks += canConcat(solution, nums);
             }
 
         }
-        return total;
+
+        System.out.println("the rechecks: " + rechecks + "\nThe total: " + total);
+        return total + rechecks;
     }
 
     public static Long canConcat(Long solution, Long[] nums) {
@@ -54,23 +57,19 @@ public class BridgeRepair {
     }
 
     public static boolean iteratePermutations(int[][] permutations, Long[] nums, Long solution) {
-        int n = permutations[0].length;
 
         for (int i = 0; i < permutations.length; i++) {
             ArrayList<String> concat = new ArrayList<>();
             Long sum = nums[0];
 
-            for (int j = 0; j < n; j++) {
-                if (permutations[i][j] == 0) {
-                    sum += nums[j + 1];
-                    // System.out.print(nums[j] + " + ");
-                } else if (permutations[i][j] == 1) {
-                    sum *= nums[j + 1];
-                    // System.out.print(nums[j] + " * ");
+            for (int j = 1; j < nums.length; j++) {
+                if (permutations[i][j - 1] == -1) {
+                    sum += nums[j];
+                } else if (permutations[i][j - 1] == 1) {
+                    sum *= nums[j];
                 } else {
-                    concat.add(String.valueOf(sum));
-                    // System.out.print(nums[j] + " || ");
-                    sum = nums[j + 1];
+                    String sumString = String.valueOf(sum) + String.valueOf(nums[j]);
+                    sum = Long.parseLong(sumString);
                 }
             }
 
@@ -80,24 +79,13 @@ public class BridgeRepair {
                 candidate += num;
 
             if (candidate.equals(String.valueOf(solution))) {
-                System.out.println(solution + " : " + candidate);
                 return true;
             }
 
         }
+        System.out.println(solution);
 
         return false;
-    }
-
-    public static void print2d(int[][] perms) {
-
-        for (int i = 0; i < perms.length; i++) {
-            for (int j = 0; j < perms[i].length; j++)
-                System.out.print(perms[i][j] + " ");
-
-            System.out.println();
-        }
-
     }
 
     // 3^n, -1, 0, 1 concat, mult, add
