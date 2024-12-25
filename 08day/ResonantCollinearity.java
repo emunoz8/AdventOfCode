@@ -10,11 +10,47 @@ public class ResonantCollinearity {
         Map<Character, List<int[]>> frequencies = new HashMap<>();
         int total = 0;
         getCharacterPosition(map, frequencies);
-        setAntinodes(frequencies, antinodesPostions);
+        // setAntinodes(frequencies, antinodesPostions);// part 1
+        setResonatingAntinodes(frequencies, antinodesPostions);// part 2
 
         total = getTotalAntinodes(antinodesPostions);
 
         System.out.println(total);
+    }
+
+    public static void setResonatingAntinodes(Map<Character, List<int[]>> frequencies, boolean[][] map) {
+        for (Map.Entry<Character, List<int[]>> entry : frequencies.entrySet()) {
+            List<int[]> positions = entry.getValue();
+            for (int i = 0; i < positions.size(); i++)
+                for (int j = i + 1; j < positions.size(); j++)
+                    resonating(map, positions.get(i), positions.get(j));
+
+        }
+
+    }
+
+    public static void resonating(boolean[][] map, int[] left, int[] right) {
+        int x = left[0];
+        int y = left[1];
+        int dx = x - right[0];
+        int dy = y - right[1];
+        map[x][y] = true;
+        while (isInbounds(map, x, y, dx, dy)) {
+            map[x + dx][y + dy] = true;
+            x += dx;
+            y += dy;
+        }
+        x = right[0];
+        y = right[1];
+        dx = x - left[0];
+        dy = y - left[1];
+        map[x][y] = true;
+        while (isInbounds(map, x, y, dx, dy)) {
+            map[x + dx][y + dy] = true;
+            x += dx;
+            y += dy;
+        }
+
     }
 
     public static void setAntinodes(Map<Character, List<int[]>> frequencies, boolean[][] antinodesPostions) {
