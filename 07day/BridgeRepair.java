@@ -83,7 +83,6 @@ public class BridgeRepair {
             }
 
         }
-        System.out.println(solution);
 
         return false;
     }

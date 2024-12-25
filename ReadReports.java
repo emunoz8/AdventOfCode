@@ -4,6 +4,9 @@ import java.nio.file.Paths;
 import java.nio.file.Path;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class ReadReports {
 
@@ -92,6 +95,20 @@ public class ReadReports {
             System.out.println("Error: " + e);
         }
         return list;
+    }
+
+    public static void printMemory(ArrayList<Integer> memory) {
+        String filename = "./09day/output.txt";
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+            for (Integer file : memory) {
+                writer.write(file + " ");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 }
