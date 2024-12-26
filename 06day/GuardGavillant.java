@@ -10,7 +10,7 @@ public class GuardGavillant {
         ArrayList<int[]> visited = new ArrayList<>();
         int steps = 0;
         int obstacles = 0;
-        indexOfGuardian = findCharacter(map);
+        indexOfGuardian = findCharacter(map, '^');
 
         if (indexOfGuardian[0] == -1) {
             System.out.println("No Guardian found");
@@ -121,16 +121,6 @@ public class GuardGavillant {
         return (startX + dx >= 0 && startX + dx < puzzle.length && startY + dy >= 0 && startY + dy < puzzle[0].length);
     }
 
-    public static void printMap(char[][] map) {
-        for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map[0].length; j++) {
-                System.out.print(map[i][j]);
-            }
-            System.out.println();
-        }
-
-    }
-
     public static char[][] deepCopy(char[][] array) {
         char[][] rArr = new char[array.length][array[0].length];
 
@@ -141,10 +131,10 @@ public class GuardGavillant {
         return rArr;
     }
 
-    public static int[] findCharacter(char[][] map) {
+    public static int[] findCharacter(char[][] map, char sym) {
         for (int i = 0; i < map.length; i++)
             for (int j = 0; j < map.length; j++)
-                if (map[i][j] == '^')
+                if (map[i][j] == sym)
                     return new int[] { i, j };
 
         return new int[] { -1, -1 };
