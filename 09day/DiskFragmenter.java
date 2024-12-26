@@ -55,12 +55,11 @@ public class DiskFragmenter {
                 if (space.getValue() >= indexSize[1]) {
                     // consolidate(freeMemory, indexSize);//not necessary for problem
                     indexSize[0] = space.getKey();
-                    if (space.getValue() == indexSize[1])
-                        freeMemory.remove(space.getKey());
-                    else {
+                    if (space.getValue() != indexSize[1])
                         freeMemory.put((space.getKey() + indexSize[1]), space.getValue() - indexSize[1]);
-                        freeMemory.remove(space.getKey());
-                    }
+
+                    freeMemory.remove(space.getKey());
+
                     break;
                 }
             }
@@ -69,7 +68,7 @@ public class DiskFragmenter {
     }
 
     public static void consolidate(Map<Integer, Integer> freeMemory, int[] free) {
-        // TO-DO will add free memory to freeMemory table, in case it was adjecent free
+        // TO-DO will add free memory to freeMemory table, in case it has adjacent free
         // memory then it will consolidate.
     }
 
