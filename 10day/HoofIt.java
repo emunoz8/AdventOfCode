@@ -12,8 +12,6 @@ public class HoofIt {
         findAllStarts(starts, map);
 
         iterateThroughStarts(visited, starts, map);
-
-        ReadReports.printMap(map);
     }
 
     public static void iterateThroughStarts(Map<Integer, ArrayList<Integer>> visited, ArrayList<int[]> starts,
@@ -35,8 +33,10 @@ public class HoofIt {
             int m, boolean isFirst) {
         if (!isFirst && !isValid(visited, map, x, y, dx, dy, n, m))
             return false;
+
         x += dx;
         y += dy;
+
         int key = getKeyNum(x, y, n, m);
         if (visited.containsKey(key))
             return true;
@@ -55,8 +55,7 @@ public class HoofIt {
 
             if (hasHill) {
                 int hillKey = getKeyNum(x + dir[0], y + dir[1], n, m);
-                int previousKey = getKeyNum(x, y, n, m);
-                copyHills(visited, previousKey, hillKey);
+                copyHills(visited, key, hillKey);
                 atLeastOne = true;
             }
 
