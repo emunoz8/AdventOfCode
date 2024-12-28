@@ -12,6 +12,8 @@ public class HoofIt {
         findAllStarts(starts, map);
 
         iterateThroughStarts(visited, starts, map);
+
+        ReadReports.printMap(map);
     }
 
     public static void iterateThroughStarts(Map<Integer, ArrayList<Integer>> visited, ArrayList<int[]> starts,
@@ -21,13 +23,8 @@ public class HoofIt {
         int sum = 0;
 
         for (int[] start : starts) {
-            for (int i = 0; i < DIR.length; i++) {
-                travel(visited, map, start[0], start[1], DIR[i][0], DIR[i][1], n, m);
-            }
-
-            int key = (start[0] * n) + (start[1] % m);
-
-            sum += visited.get(key).size();
+            travel(visited, map, start[0], start[1], 0, 0, n, m, true);
+            sum += visited.get(getKeyNum(start[0], start[1], m, n)).size();
 
         }
         System.out.println(sum);
@@ -35,39 +32,51 @@ public class HoofIt {
 
     public static boolean travel(Map<Integer, ArrayList<Integer>> visited, char[][] map, int x, int y, int dx, int dy,
             int n,
-            int m) {
-
-        if (!isValid(visited, map, x, y, dx, dy, n, m))
+            int m, boolean isFirst) {
+        if (!isFirst && !isValid(visited, map, x, y, dx, dy, n, m))
             return false;
-
-        if (map[x + dx][y + dy] == '9') {
+        x += dx;
+        y += dy;
+        int key = getKeyNum(x, y, n, m);
+        if (visited.containsKey(key))
             return true;
-        }
-        int key = (((x) * n) + ((y) % m));
-        if (!visited.containsKey(key))
-            visited.put(key, new ArrayList<>());
-        boolean hasHill = false;
+        visited.put(key, new ArrayList<>());
+        boolean hasHill = false, atLeastOne = false;
 
         for (int[] dir : DIR) {
-            hasHill = travel(visited, map, x + dx, y + dy, dir[0], dir[1], n, m);
+
+            if (map[x][y] == '9') {
+                int hill = getKeyNum(x, y, n, m);
+                visited.computeIfAbsent(hill, k -> new ArrayList<>()).add(hill);
+                return true;
+            }
+
+            hasHill = travel(visited, map, x, y, dir[0], dir[1], n, m, false);
 
             if (hasHill) {
-                int hillKey = (((x + dx + dir[0]) * n) + ((y + dy + dir[1]) % m));
-                visited.get(key).add(hillKey);
-
-            }
-            int previousKey = (x + dx) * n + (y + dy) % m;
-            if (visited.containsKey(previousKey)) {
-                for (Integer num : visited.get(previousKey)) {
-                    if (!visited.get(key).contains(num))
-                        visited.get(key).add(num);
-                }
-
+                int hillKey = getKeyNum(x + dir[0], y + dir[1], n, m);
+                int previousKey = getKeyNum(x, y, n, m);
+                copyHills(visited, previousKey, hillKey);
+                atLeastOne = true;
             }
 
         }
 
+        if (atLeastOne)
+            return true;
+
         return false;
+    }
+
+    public static void copyHills(Map<Integer, ArrayList<Integer>> visited, int cKey, int pKey) {
+        for (Integer num : visited.get(pKey))
+            if (!visited.get(cKey).contains(num))
+                visited.get(cKey).add(num);
+    }
+
+    public static int getKeyNum(int x, int y, int n, int m) {
+        return (x * n) + (y % m);
+
     }
 
     public static void findAllStarts(ArrayList<int[]> starts, char[][] map) {
