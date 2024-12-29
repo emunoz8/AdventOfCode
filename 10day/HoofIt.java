@@ -11,7 +11,7 @@ public class HoofIt {
         ArrayList<int[]> starts = new ArrayList<>();
         findAllStarts(starts, map);
 
-        iterateThroughStarts(visited, starts, map);
+        iterateThroughStarts(visited, starts, map);// part 1
     }
 
     public static void iterateThroughStarts(Map<Integer, ArrayList<Integer>> visited, ArrayList<int[]> starts,
@@ -19,13 +19,21 @@ public class HoofIt {
         int n = map.length;
         int m = map[0].length;
         int sum = 0;
+        int unique = 0;
 
         for (int[] start : starts) {
             travel(visited, map, start[0], start[1], 0, 0, n, m, true);
-            sum += visited.get(getKeyNum(start[0], start[1], m, n)).size();
+            int key = getKeyNum(start[0], start[1], n, m);
+            sum += visited.get(key).size();
+            unique += uniquePathsForEachStart(visited.get(key), map, key);
 
         }
         System.out.println(sum);
+    }
+
+    public static int uniquePathsForEachStart(ArrayList<Integer> hills, char[][] map, int key) {
+
+        return -1;
     }
 
     public static boolean travel(Map<Integer, ArrayList<Integer>> visited, char[][] map, int x, int y, int dx, int dy,
@@ -38,8 +46,11 @@ public class HoofIt {
         y += dy;
 
         int key = getKeyNum(x, y, n, m);
-        if (visited.containsKey(key))
+        if (visited.containsKey(key)) {
+
             return true;
+        }
+
         visited.put(key, new ArrayList<>());
         boolean hasHill = false, atLeastOne = false;
 
