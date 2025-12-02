@@ -31,9 +31,24 @@ public class HoofIt {
         System.out.println(sum);
     }
 
-    public static int uniquePathsForEachStart(ArrayList<Integer> hills, char[][] map, int key) {
+    public static int uniquePathsForEachStart(ArrayList<Integer> hills, char[][] map, int start) {
+        int total = 0;
 
-        return -1;
+        for(Integer hill: hills){
+            total += getToHill(map, start, hill);
+        }
+
+
+        return total;
+    }
+
+    public static int getToHill(char[][] map, int start, int hill){
+        int routes =0;
+
+        
+
+
+        return routes;
     }
 
     public static boolean travel(Map<Integer, ArrayList<Integer>> visited, char[][] map, int x, int y, int dx, int dy,
