@@ -1,0 +1,19 @@
+[
+  {
+    "key": "ctrl+alt+b",
+    "command": "workbench.action.tasks.build"
+  },
+  {
+    "key": "ctrl+alt+r",
+    "command": "workbench.action.tasks.runTask",
+    "args": "Run with I/O"
+  },
+  {
+    "key": "ctrl+alt+n",
+    "command": "code-runner.run"
+  },
+  {
+    "key": "ctrl+alt+s",
+    "command": "workbench.action.files.saveAll"
+  }
+]
