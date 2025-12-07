@@ -15,7 +15,9 @@ int main() {
 
     deltaValue = line[0] == 'L' ? -num : num;
 
-    currentValue = ((currentValue + deltaValue)) % maxVal;
+    currentValue = (((currentValue + deltaValue) % maxVal) + maxVal) % maxVal;
+
+    cout << currentValue << "\n";
 
     if (currentValue == 0) count++;
   }

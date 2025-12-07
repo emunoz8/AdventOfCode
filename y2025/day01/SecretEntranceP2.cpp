@@ -3,7 +3,6 @@ using namespace std;
 
 int main() {
   int currentValue = 50;
-  int deltaValue;
   int maxValue = 100;
   int count = 0;
   string line;
@@ -12,20 +11,39 @@ int main() {
 
   while (getline(cin, line)) {
     int num = stoi(line.substr(1));
-    int diff;
+    char dir = line[0];
 
-    deltaValue = line[0] == 'L' ? -num : num;
+    int fullLoops = num / maxValue;
+    int rem = num % maxValue;
 
-    diff = currentValue + deltaValue;
+    int extra = 0;
 
-    if (diff >= 100 || diff < 0) count += (deltaValue / maxValue) + 1;
+    int distToZero;
+    if (dir == 'R') {
+      distToZero = (maxValue - currentValue) % maxValue;
+    } else {
+      distToZero = currentValue % maxValue;
+    }
+    if (distToZero == 0) distToZero = maxValue;
 
-    currentValue = (currentValue + deltaValue) % maxValue;
+    if (rem >= distToZero) extra = 1;
 
-    if (currentValue == 0) count++;
+    if (dir == 'R') {
+      currentValue = (currentValue + num) % maxValue;
+    } else {
+      currentValue = (currentValue - num) % maxValue;
+      if (currentValue < 0) currentValue += maxValue;
+    }
+
+    count += (fullLoops + extra);
+
+    /*
+    cout << line << " -> " << currentValue << " $" << (fullLoops + extra)
+         << "\n";
+
+         */
   }
 
   cout << count;
-
   return 0;
 }
